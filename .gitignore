@@ -4,3 +4,5 @@ dhttest.ncrunchsolution
 dhttest/bin/*
 dhttest/obj/*
 monotorrent/build/*
+monotorrent/src/MonoTorrent.Dht/obj/*
+monotorrent/src/MonoTorrent/obj/*
