@@ -57,13 +57,6 @@ namespace dhttest
 		{
 			lock (_peers)
 			{
-				foreach(var p in _peers)
-				{
-					if(!e.Peers.Contains(p))
-					{
-						_peers.Remove(p);
-					}
-				}
 				foreach(var p in e.Peers)
 				{
 					if(!_peers.Contains(p))
