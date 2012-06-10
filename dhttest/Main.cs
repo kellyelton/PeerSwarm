@@ -27,11 +27,15 @@ namespace dhttest
 		private static List<Peer> _peers;
 
 		public static TrackerBasedSwarm TrackerSwarm;
+		public static DhtBasedSwarm DhtSwarm;
+		public static string BasePath = Environment.CurrentDirectory;
 		public static void Main (string[] args)
 		{
 			var sha = new SHA1CryptoServiceProvider();
 			_hash = new InfoHash(sha.ComputeHash(Encoding.ASCII.GetBytes("OCTGN")));
+			_peers = new List<Peer>();
 
+			Debug.Listeners.Add(new ConsoleTraceListener());
 			Console.CancelKeyPress += delegate { Shutdown(); };
 			AppDomain.CurrentDomain.ProcessExit += delegate { Shutdown(); };
 			AppDomain.CurrentDomain.UnhandledException += delegate(object sender, UnhandledExceptionEventArgs e) { Debug.WriteLine(e.ExceptionObject); Shutdown(); };
@@ -43,19 +47,42 @@ namespace dhttest
 		static void Setup()
 		{
 			TrackerSwarm = new TrackerBasedSwarm(_hash);
+			DhtSwarm = new DhtBasedSwarm(_hash);
+
+			DhtSwarm.PeersFound += DhtSwarmPeersFound;
+		}
+
+		static void DhtSwarmPeersFound(object sender, PeersFoundEventArgs e)
+		{
+			foreach(var p in _peers)
+			{
+				if(!e.Peers.Contains(p))
+				{
+					_peers.Remove(p);
+				}
+			}
+			foreach(var p in e.Peers)
+			{
+				if(!_peers.Contains(p))
+				{
+					_peers.Add(p);
+				}
+			}
+			foreach(var p in _peers)
+			{
+				Console.WriteLine(p.ConnectionUri);
+			}
 		}
 		static void Loop()
 		{
+			DhtSwarm.Start();
 			while(!_quit)
 			{
-				_peers = TrackerSwarm.Loop();
-				Console.WriteLine(Resource1.MainClass_Loop_Peers);
-				foreach (var p in _peers)
-				{
-					Console.WriteLine(p.ConnectionUri);
-				}
+				DhtSwarm.Loop();
+				//_peers = TrackerSwarm.Loop();
 				Thread.Sleep(30000);
 			}
+			DhtSwarm.Stop();
 		}
 		public static void Shutdown()
 		{
