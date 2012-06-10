@@ -25,6 +25,7 @@ namespace dhttest
 
 			engine.PeersFound += (o, e) => Console.WriteLine("I FOUND PEERS: {0}", e.Peers.Count);
 			listener.Start();
+			engine.Announce(hash,15000);
 			engine.Start(nodes);
 			
 			while(Console.ReadLine() != "q")
