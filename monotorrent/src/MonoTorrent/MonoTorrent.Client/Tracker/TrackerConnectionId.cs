@@ -35,7 +35,7 @@ using System.Threading;
 
 namespace MonoTorrent.Client.Tracker
 {
-    internal class TrackerConnectionID
+    public class TrackerConnectionID
     {
         TorrentEvent torrentEvent;
         Tracker tracker;
@@ -52,7 +52,7 @@ namespace MonoTorrent.Client.Tracker
             get { return tracker; }
         }
 
-        internal bool TrySubsequent
+        public bool TrySubsequent
         {
             get { return trySubsequent; }
         }

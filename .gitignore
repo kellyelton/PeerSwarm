@@ -6,3 +6,6 @@ dhttest/obj/*
 monotorrent/build/*
 monotorrent/src/MonoTorrent.Dht/obj/*
 monotorrent/src/MonoTorrent/obj/*
+dhttest.ncrunchsolution.user
+dhttest.sln.DotSettings.user
+dhttest/dhttest.csproj.DotSettings.user
