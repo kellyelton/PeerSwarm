@@ -5,6 +5,7 @@ using System.Text;
 using MonoTorrent;
 using MonoTorrent.BEncoding;
 using MonoTorrent.Client;
+using MonoTorrent.Client.Messages;
 using MonoTorrent.Dht;
 using MonoTorrent.Dht.Listeners;
 using System.Net;
@@ -20,15 +21,17 @@ namespace dhttest
 		private readonly DhtEngine _engine;
 		private readonly byte[] _nodes;
 		private readonly InfoHash _hash;
-		private int _aCounter;
+		private readonly Random _random;
 		public DhtBasedSwarm(InfoHash hash)
 		{
-			_aCounter = 0;
 			_hash = hash;
 			_listener = new DhtListener(new IPEndPoint(IPAddress.Any, 15000));
 			_engine = new DhtEngine(_listener);
+			
 			_engine.PeersFound += EnginePeersFound;
 			_engine.StateChanged += EngineStateChanged;
+			_listener.MessageReceived += ListenerMessageReceived;
+			_random = new Random();
 			if (File.Exists(Path.Combine(MainClass.BasePath,"DHTNodes.txt")))
 			{
 				Log("Node File Found.");
@@ -36,9 +39,30 @@ namespace dhttest
 			}
 		}
 
+		void ListenerMessageReceived(byte[] buffer, IPEndPoint endpoint)
+		{
+			try
+			{
+				var b = BEncodedValue.Decode(buffer);
+				var d = b as BEncodedDictionary;
+				if (d != null)
+				{
+					//if (d.ContainsKey("q"))
+						//if (Equals(d["q"] , new BEncodedString("get_peers"))) 
+							//Debugger.Break();
+				}
+			}
+			catch
+			{
+				
+			}
+		}
+
 		void EngineStateChanged(object sender, EventArgs e)
 		{
 			Log("State Changed");
+			Announce();
+
 		}
 
 		void EnginePeersFound(object sender, PeersFoundEventArgs e)
@@ -46,26 +70,28 @@ namespace dhttest
 			Log("Peers Found: {0}" , e.Peers.Count);
 			if (PeersFound != null) PeersFound.Invoke(this , e);
 		}
+		void GetPeers()
+		{
+			Log("Getting Peers");
+			byte[] b = new byte[20];
+			lock (_random) _random.NextBytes(b);
+			_engine.GetPeers(_hash);
+		}
+		void Announce()
+		{
+			Log("Announcing");
+			_engine.Announce(_hash, 15000);
+		}
 		public void Start()
 		{
 			Log("Started");
 			_listener.Start();
 			_engine.Start(_nodes);
-			Log("Announcing");
-			_engine.Announce(_hash, 15000);
-			var list = new BEncodedList();
+			Announce();
 		}
 		public void Loop()
 		{
-			if(_aCounter == 2)
-			{
-				Log("Announcing");
-				_engine.Announce(_hash, 15000);
-				_aCounter = 0;
-			}
-			Log("Getting Peers");
-			_engine.GetPeers(_hash);
-			_aCounter++;
+			GetPeers();
 		}
 		public void Stop()
 		{

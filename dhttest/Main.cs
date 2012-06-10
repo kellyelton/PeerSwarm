@@ -34,6 +34,7 @@ namespace dhttest
 			var sha = new SHA1CryptoServiceProvider();
 			_hash = new InfoHash(sha.ComputeHash(Encoding.ASCII.GetBytes("OCTGN")));
 			_peers = new List<Peer>();
+			
 
 			Debug.Listeners.Add(new ConsoleTraceListener());
 			Console.CancelKeyPress += delegate { Shutdown(); };
@@ -54,23 +55,26 @@ namespace dhttest
 
 		static void DhtSwarmPeersFound(object sender, PeersFoundEventArgs e)
 		{
-			foreach(var p in _peers)
+			lock (_peers)
 			{
-				if(!e.Peers.Contains(p))
+				foreach(var p in _peers)
 				{
-					_peers.Remove(p);
+					if(!e.Peers.Contains(p))
+					{
+						_peers.Remove(p);
+					}
 				}
-			}
-			foreach(var p in e.Peers)
-			{
-				if(!_peers.Contains(p))
+				foreach(var p in e.Peers)
 				{
-					_peers.Add(p);
+					if(!_peers.Contains(p))
+					{
+						_peers.Add(p);
+					}
 				}
-			}
-			foreach(var p in _peers)
-			{
-				Console.WriteLine(p.ConnectionUri);
+				foreach(var p in _peers)
+				{
+					Console.WriteLine(p.ConnectionUri);
+				}
 			}
 		}
 		static void Loop()
