@@ -1,0 +1,6 @@
+﻿*/Debug/MonoTorrent.Dht.dll
+_ReSharper.*
+dhttest.ncrunchsolution
+dhttest/bin/*
+dhttest/obj/*
+monotorrent/build/*

@@ -6,7 +6,7 @@ namespace dhttest
 	{
 		public static void Main (string[] args)
 		{
-			Console.WriteLine ("Hello World!");
+			
 		}
 	}
 }
