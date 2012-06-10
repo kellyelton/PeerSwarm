@@ -45,7 +45,12 @@ namespace MonoTorrent.Dht.Messages
 
         public BEncodedString Token
         {
-            get { return (BEncodedString)Parameters[TokenKey]; }
+            get
+            {
+				if (Parameters.ContainsKey(TokenKey))
+					return (BEncodedString)Parameters[TokenKey];
+				return new BEncodedString("");
+            }
             set { Parameters[TokenKey] = value; }
         }
 

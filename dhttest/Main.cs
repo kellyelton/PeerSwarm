@@ -82,7 +82,7 @@ namespace dhttest
 				//_peers = TrackerSwarm.Loop();
 				Thread.Sleep(30000);
 			}
-			DhtSwarm.Stop();
+			
 		}
 		public static void Shutdown()
 		{
@@ -92,7 +92,8 @@ namespace dhttest
 				lst.Flush();
 				lst.Close();
 			}
-			Thread.Sleep(2000);
+			DhtSwarm.Stop();
+			Thread.Sleep(1000);
 		}
 	}
 }

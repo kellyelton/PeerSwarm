@@ -99,9 +99,11 @@ namespace MonoTorrent.Dht.Messages
             error = null;
 
 			if (!dictionary.ContainsKey(MessageTypeKey)) return false;
-			if (!dictionary.ContainsKey(QueryNameKey)) return false;
+			
             if (dictionary[MessageTypeKey].Equals(QueryMessage.QueryType))
             {
+				if (!dictionary.ContainsKey(QueryNameKey)) return false;
+				if (!queryDecoders.ContainsKey((BEncodedString)dictionary[QueryNameKey])) return false;
                 message = queryDecoders[(BEncodedString)dictionary[QueryNameKey]](dictionary);
             }
             else if (dictionary[MessageTypeKey].Equals(ErrorMessage.ErrorType))
