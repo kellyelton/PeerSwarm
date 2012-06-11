@@ -61,11 +61,29 @@ namespace dhttest {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [{0}]:{1}.
+        /// </summary>
+        public static string MainClass_LogOutput_Format {
+            get {
+                return ResourceManager.GetString("MainClass_LogOutput_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Peers.
         /// </summary>
         public static string MainClass_Loop_Peers {
             get {
                 return ResourceManager.GetString("MainClass_Loop_Peers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ------------------.
+        /// </summary>
+        public static string MainClass_SwarmPeersFound_Line {
+            get {
+                return ResourceManager.GetString("MainClass_SwarmPeersFound_Line", resourceCulture);
             }
         }
         

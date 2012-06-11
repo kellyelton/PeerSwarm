@@ -124,4 +124,10 @@
 	<data name="MainClass_Loop_Peers">
 		<value xml:space="preserve">Peers</value>
 	</data>
+	<data name="MainClass_SwarmPeersFound_Line">
+		<value xml:space="preserve">------------------</value>
+	</data>
+	<data name="MainClass_LogOutput_Format">
+		<value xml:space="preserve">[{0}]:{1}</value>
+	</data>
 </root>

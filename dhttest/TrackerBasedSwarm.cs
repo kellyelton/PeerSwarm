@@ -1,64 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using MonoTorrent;
-using MonoTorrent.Client;
 using MonoTorrent.Client.Tracker;
 using MonoTorrent.Common;
 
 namespace dhttest
 {
-	public class TrackerBasedSwarm
+	public class TrackerBasedSwarm : PeerSwarm
 	{
-		private readonly List<Peer> _peers;
-		private readonly HTTPTracker _tracker;
+		private readonly List<Tracker> _trackers;
 		private readonly AnnounceParameters _aParams;
-		private readonly InfoHash _hash;
 
-		public TrackerBasedSwarm(InfoHash hash)
+		public TrackerBasedSwarm(InfoHash hash, int port):base(hash,port)
 		{
-			_hash = hash;
-			//_tracker = new UdpTracker(new Uri("udp://tracker.openbittorrent.com:80/announce"));
-			//_tracker = new UdpTracker(new Uri("udp://tracker.publicbt.com:80"));
-			//_tracker = new UdpTracker(new Uri("udp://tracker.ccc.de:80"));
-			//_tracker = new UdpTracker(new Uri("udp://tracker.istole.it:80"));
-			_tracker = new HTTPTracker(new Uri("http://announce.torrentsmd.com:6969/announce"));
-			_tracker.AnnounceComplete += TrackerAnnounceComplete;
 			_aParams = new AnnounceParameters
 			{
-				InfoHash = _hash,
+				InfoHash = Hash,
 				BytesDownloaded = 0,
 				BytesLeft = 0,
 				BytesUploaded = 0,
 				PeerId = "OCTGN",
 				Ipaddress = IPAddress.Any.ToString(),
-				Port = 15000,
+				Port = Port,
 				RequireEncryption = false,
 				SupportsEncryption = true,
 				ClientEvent = new TorrentEvent()
 			};
-			_peers = new List<Peer>();
+			_trackers = new List<Tracker>();
+		}
+		public void AddTracker(string track)
+		{
+			Uri res;
+			if(Uri.TryCreate(track , UriKind.Absolute , out res))
+			{
+				if(res.Scheme == "udp")
+				{
+					var t = new UdpTracker(res);
+					t.AnnounceComplete += TrackerAnnounceComplete;
+					_trackers.Add(t);
+				}
+				else if(res.Scheme == Uri.UriSchemeHttp)
+				{
+					var t = new HTTPTracker(res);
+					t.AnnounceComplete += TrackerAnnounceComplete;
+					_trackers.Add(t);
+				}
+			}
 		}
 		void TrackerAnnounceComplete(object sender, AnnounceResponseEventArgs e)
 		{
-			Debug.WriteLine("Announce Done.");
-			foreach (var p in e.Peers)
+			if(e.Peers.Count > 0)
 			{
-				if (!_peers.Contains(p)) _peers.Add(p);
+				Log("Announce Success: {0}", e.Tracker.Uri);
+				InvokePeersFound(this,new PeersFoundEventArgs(Hash,e.Peers));
+				return;
+			}
+			if(e.Successful ==false)
+			{
+				Log("Announce Failed: {0}" , e.Tracker.Uri);
 			}
 		}
 		void Announce()
 		{
-			Debug.WriteLine("Announcing...");
-			var id = new TrackerConnectionID(_tracker, true, TorrentEvent.None, new ManualResetEvent(false));
-			_tracker.Announce(_aParams, id);
+			foreach(var t in _trackers)
+			{
+				var id = new TrackerConnectionID(t, true, TorrentEvent.None, new ManualResetEvent(false));
+				Log("Announcing: {0}" , t.Uri);
+				t.Announce(_aParams , id);
+			}
 		}
-		public List<Peer> Loop()
+
+		public override void Start()
+		{
+			
+		}
+
+		public override void Loop()
 		{
 			Announce();
-			return _peers;
+		}
+
+		public override void Stop()
+		{
+			
 		}
 	}
 }
