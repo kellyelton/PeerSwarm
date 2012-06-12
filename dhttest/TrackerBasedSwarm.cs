@@ -11,23 +11,11 @@ namespace dhttest
 	public class TrackerBasedSwarm : PeerSwarm
 	{
 		private readonly List<Tracker> _trackers;
-		private readonly AnnounceParameters _aParams;
+		public AnnounceParameters AParams { get; set; }
 
-		public TrackerBasedSwarm(InfoHash hash, int port):base(hash,port)
+		public TrackerBasedSwarm(InfoHash hash, int port, AnnounceParameters param):base(hash,port)
 		{
-			_aParams = new AnnounceParameters
-			{
-				InfoHash = Hash,
-				BytesDownloaded = 0,
-				BytesLeft = 0,
-				BytesUploaded = 0,
-				PeerId = "OCTGN",
-				Ipaddress = IPAddress.Any.ToString(),
-				Port = Port,
-				RequireEncryption = false,
-				SupportsEncryption = true,
-				ClientEvent = new TorrentEvent()
-			};
+			AParams = param;
 			_trackers = new List<Tracker>();
 		}
 		public void AddTracker(string track)
@@ -68,7 +56,7 @@ namespace dhttest
 			{
 				var id = new TrackerConnectionID(t, true, TorrentEvent.None, new ManualResetEvent(false));
 				Log("Announcing: {0}" , t.Uri);
-				t.Announce(_aParams , id);
+				t.Announce(AParams , id);
 			}
 		}
 

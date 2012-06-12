@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using MonoTorrent;
 using MonoTorrent.Client;
+using MonoTorrent.Common;
 
 namespace dhttest
 {
@@ -39,12 +42,26 @@ namespace dhttest
 		}
 		static void Setup()
 		{
+			var param = new MonoTorrent.Client.Tracker.AnnounceParameters
+			{
+				InfoHash = _hash,
+				BytesDownloaded = 0,
+				BytesLeft = 0,
+				BytesUploaded = 0,
+				PeerId = "OCTGN",
+				Ipaddress = IPAddress.Any.ToString(),
+				Port = Port,
+				RequireEncryption = false,
+				SupportsEncryption = true,
+				ClientEvent = new TorrentEvent()
+			};
+
 			var d = new DhtBasedSwarm(_hash , Port);
 			d.PeersFound += SwarmPeersFound;
 			d.LogOutput += LogOutput;
 			PeerSwarm.Add(d);
 
-			var t = new TrackerBasedSwarm(_hash , Port);
+			var t = new TrackerBasedSwarm(_hash , Port, param);
 			t.AddTracker("udp://tracker.openbittorrent.com:80/announce");
 			t.AddTracker("udp://tracker.publicbt.com:80/announce");
 			t.AddTracker("udp://tracker.ccc.de:80/announce");
