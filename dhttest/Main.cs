@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -16,14 +17,14 @@ namespace PeerSwarmTester
 		private static InfoHash _hash;
 		private const int Port = 15000;
 		private static bool _quit;
-		private static string _name = Assembly.GetExecutingAssembly().FullName;
+		private static readonly string Name = Assembly.GetExecutingAssembly().FullName;
 
 		public static PeerSwarmManager Man;
 
 		public static void Main (string[] args)
 		{
 			var sha = new SHA1CryptoServiceProvider();
-			_hash = new InfoHash(sha.ComputeHash(Encoding.ASCII.GetBytes(_name)));
+			_hash = new InfoHash(sha.ComputeHash(Encoding.ASCII.GetBytes(Name)));
 
 			Debug.Listeners.Add(new ConsoleTraceListener());
 			Console.CancelKeyPress += delegate { Shutdown(); };
@@ -42,7 +43,7 @@ namespace PeerSwarmTester
 				BytesDownloaded = 0,
 				BytesLeft = 0,
 				BytesUploaded = 0,
-				PeerId = _name,
+				PeerId = Name,
 				Ipaddress = IPAddress.Any.ToString(),
 				Port = Port,
 				RequireEncryption = false,
@@ -50,7 +51,7 @@ namespace PeerSwarmTester
 				ClientEvent = new TorrentEvent()
 			};
 
-			Man = new PeerSwarmManager(Port , param , _hash);
+			Man = new PeerSwarmManager(Port, param, _hash, Path.Combine(Environment.CurrentDirectory, "DHTNodes.txt"));
 			Man.AddTracker("udp://tracker.openbittorrent.com:80/announce");
 			Man.AddTracker("udp://tracker.publicbt.com:80/announce");
 			Man.AddTracker("udp://tracker.ccc.de:80/announce");

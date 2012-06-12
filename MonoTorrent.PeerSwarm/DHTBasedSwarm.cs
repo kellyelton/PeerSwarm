@@ -11,18 +11,21 @@ namespace MonoTorrent.PeerSwarm
 		private readonly DhtListener _listener;
 		private readonly DhtEngine _engine;
 		private readonly byte[] _nodes;
-		public DhtBasedSwarm(InfoHash hash, int port):base(hash,port)
+		private readonly string _nodeSavePath;
+		public DhtBasedSwarm(InfoHash hash, int port, string nodeSavePath):base(hash,port)
 		{
+			_nodeSavePath = nodeSavePath;
 			_listener = new DhtListener(new IPEndPoint(IPAddress.Any, Port));
 			_engine = new DhtEngine(_listener);
 			
 			_engine.PeersFound += EnginePeersFound;
 			_engine.StateChanged += EngineStateChanged;
 			_listener.MessageReceived += ListenerMessageReceived;
-			//TODO Should somehow pull this piece out of this file, so it can be genericafied
-			if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "DHTNodes.txt"))) return;
-			Log("Node File Found.");
-			_nodes = File.ReadAllBytes("DHTNodes.txt");
+			if (!String.IsNullOrWhiteSpace(_nodeSavePath) && File.Exists(_nodeSavePath))
+			{
+				Log("Node File Found.");
+				_nodes = File.ReadAllBytes(_nodeSavePath);
+			}
 		}
 
 		void ListenerMessageReceived(byte[] buffer, IPEndPoint endpoint)
@@ -66,7 +69,7 @@ namespace MonoTorrent.PeerSwarm
 		public override void Stop()
 		{
 			Log("Stopping");
-			File.WriteAllBytes(Path.Combine(Environment.CurrentDirectory, "DHTNodes.txt"), _engine.SaveNodes());
+			File.WriteAllBytes(_nodeSavePath, _engine.SaveNodes());
 			_listener.Stop();
 			_engine.Stop();
 		}

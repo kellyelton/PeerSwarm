@@ -86,12 +86,5 @@ namespace PeerSwarmTester {
                 return ResourceManager.GetString("MainClass_SwarmPeersFound_Line", resourceCulture);
             }
         }
-        
-        public static byte[] OCTGN {
-            get {
-                object obj = ResourceManager.GetObject("OCTGN", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

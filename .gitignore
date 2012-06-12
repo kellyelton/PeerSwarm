@@ -9,3 +9,5 @@ monotorrent/src/MonoTorrent/obj/*
 dhttest.ncrunchsolution.user
 dhttest.sln.DotSettings.user
 dhttest/dhttest.csproj.DotSettings.user
+MonoTorrent.PeerSwarm/bin/*
+MonoTorrent.PeerSwarm/bin/*

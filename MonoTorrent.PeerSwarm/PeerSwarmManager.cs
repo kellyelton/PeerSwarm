@@ -18,26 +18,28 @@ namespace MonoTorrent.PeerSwarm
 		private readonly AnnounceParameters _aParams;
 		private readonly int _port;
 		private readonly ConcurrentBag<PeerSwarm> _peerSwarm;
+		private readonly string _nodeSavePath;
 
 		private Thread _thread;
 		private bool _running;
 
 		#region Constructor
 
-		public PeerSwarmManager(int port, AnnounceParameters param, InfoHash hash)
+		public PeerSwarmManager(int port, AnnounceParameters param, InfoHash hash, string nodeSavePath)
 		{
 			Peers = new ConcurrentBag<Peer>();
 			_peerSwarm = new ConcurrentBag<PeerSwarm>();
 			_hash = hash;
 			_aParams = param;
 			_port = port;
+			_nodeSavePath = nodeSavePath;
 
 			ConstructSwarm();
 		}
 		
 		private void ConstructSwarm()
 		{
-			var d = new DhtBasedSwarm(_hash , _port);
+			var d = new DhtBasedSwarm(_hash , _port,_nodeSavePath);
 			d.PeersFound += SwarmPeersFound;
 			d.LogOutput += SwarmLogOutput;
 			_peerSwarm.Add(d);
