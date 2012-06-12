@@ -17,9 +17,8 @@ namespace dhttest
 		private static InfoHash _hash;
 		private const int Port = 15000;
 		private static bool _quit;
-		private static List<Peer> _peers;
 
-		public static List<PeerSwarm> PeerSwarm;
+		public static PeerSwarmManager Man;
 
 		public static string BasePath = Environment.CurrentDirectory;
 
@@ -27,9 +26,6 @@ namespace dhttest
 		{
 			var sha = new SHA1CryptoServiceProvider();
 			_hash = new InfoHash(sha.ComputeHash(Encoding.ASCII.GetBytes("OCTGN")));
-			_peers = new List<Peer>();
-			PeerSwarm = new List<PeerSwarm>();
-			
 
 			Debug.Listeners.Add(new ConsoleTraceListener());
 			Console.CancelKeyPress += delegate { Shutdown(); };
@@ -56,20 +52,14 @@ namespace dhttest
 				ClientEvent = new TorrentEvent()
 			};
 
-			var d = new DhtBasedSwarm(_hash , Port);
-			d.PeersFound += SwarmPeersFound;
-			d.LogOutput += LogOutput;
-			PeerSwarm.Add(d);
-
-			var t = new TrackerBasedSwarm(_hash , Port, param);
-			t.AddTracker("udp://tracker.openbittorrent.com:80/announce");
-			t.AddTracker("udp://tracker.publicbt.com:80/announce");
-			t.AddTracker("udp://tracker.ccc.de:80/announce");
-			t.AddTracker("udp://tracker.istole.it:80/announce");
-			t.AddTracker("http://announce.torrentsmd.com:6969/announce");
-			t.PeersFound += SwarmPeersFound;
-			t.LogOutput += LogOutput;
-			PeerSwarm.Add(t);
+			Man = new PeerSwarmManager(Port , param , _hash);
+			Man.AddTracker("udp://tracker.openbittorrent.com:80/announce");
+			Man.AddTracker("udp://tracker.publicbt.com:80/announce");
+			Man.AddTracker("udp://tracker.ccc.de:80/announce");
+			Man.AddTracker("udp://tracker.istole.it:80/announce");
+			Man.AddTracker("http://announce.torrentsmd.com:6969/announce");
+			Man.PeersFound += SwarmPeersFound;
+			Man.LogOutput += LogOutput;
 		}
 
 		static void LogOutput(object sender, LogEventArgs e)
@@ -77,39 +67,26 @@ namespace dhttest
 #if(!DEBUG)
 			if(!e.DebugLog)
 #endif
-				Console.WriteLine(Resource1.MainClass_LogOutput_Format, sender.GetType().Name, e.Message);
+				Console.WriteLine(e.Message);
 		}
 
 		static void SwarmPeersFound(object sender, PeersFoundEventArgs e)
 		{
-			lock (_peers)
-			{
-				foreach(var p in e.Peers)
-				{
-					if(!_peers.Contains(p))
-					{
-						_peers.Add(p);
-					}
-				}
 #if(!DEBUG)
-				Console.Clear();
+			Console.Clear();
 #endif
-				Console.WriteLine(Resource1.MainClass_SwarmPeersFound_Line);
-				foreach(var p in _peers)
-				{
-					Console.WriteLine(p.ConnectionUri);
-				}
-				Console.WriteLine(Resource1.MainClass_SwarmPeersFound_Line);
+			Console.WriteLine(Resource1.MainClass_SwarmPeersFound_Line);
+			foreach(var p in Man.Peers)
+			{
+				Console.WriteLine(p.ConnectionUri);
 			}
+			Console.WriteLine(Resource1.MainClass_SwarmPeersFound_Line);
 		}
 		static void Loop()
 		{
-			foreach(var p in PeerSwarm)
-				p.Start();
+			Man.Start();
 			while(!_quit)
 			{
-				foreach(var p in PeerSwarm)
-					p.Loop();
 				Thread.Sleep(30000);
 			}
 			Finish();
@@ -124,12 +101,8 @@ namespace dhttest
 				lst.Flush();
 				lst.Close();
 			}
-			foreach (var p in PeerSwarm)
-			{
-				p.Stop();
-				p.LogOutput -= LogOutput;
-				p.PeersFound -= SwarmPeersFound;
-			}
+			Man.Stop();
+			Man.Dispose();
 			Thread.Sleep(1000);
 		}
 	}

@@ -22,6 +22,7 @@ namespace dhttest
 			_engine.StateChanged += EngineStateChanged;
 			_listener.MessageReceived += ListenerMessageReceived;
 			_random = new Random();
+			//TODO Should somehow pull this piece out of this file, so it can be genericafied
 			if(!File.Exists(Path.Combine(MainClass.BasePath , "DHTNodes.txt"))) return;
 			Log("Node File Found.");
 			_nodes = File.ReadAllBytes("DHTNodes.txt");
@@ -47,8 +48,6 @@ namespace dhttest
 		void GetPeers()
 		{
 			Log("Getting Peers");
-			byte[] b = new byte[20];
-			lock (_random) _random.NextBytes(b);
 			_engine.GetPeers(Hash);
 		}
 		void Announce()

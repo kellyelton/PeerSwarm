@@ -74,6 +74,7 @@
     <Compile Include="LogEventArgs.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="PeerSwarmManager.cs" />
     <Compile Include="PeerSwarm.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
