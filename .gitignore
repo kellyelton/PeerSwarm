@@ -1,4 +1,4 @@
-﻿*/Debug/MonoTorrent.Dht.dll
+*/Debug/MonoTorrent.Dht.dll
 _ReSharper.*
 dhttest.ncrunchsolution
 dhttest/bin/*
@@ -9,5 +9,5 @@ monotorrent/src/MonoTorrent/obj/*
 dhttest.ncrunchsolution.user
 dhttest.sln.DotSettings.user
 dhttest/dhttest.csproj.DotSettings.user
-MonoTorrent.PeerSwarm/bin/*
-MonoTorrent.PeerSwarm/bin/*
+MonoTorrent.PeerSwarm/bin/Debug/*
+MonoTorrent.PeerSwarm/obj/*
