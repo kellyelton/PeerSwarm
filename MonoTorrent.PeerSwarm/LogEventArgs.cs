@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace dhttest
+namespace MonoTorrent.PeerSwarm
 {
 	public class LogEventArgs : EventArgs
 	{

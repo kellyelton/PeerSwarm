@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using MonoTorrent;
 using MonoTorrent.Client;
 using MonoTorrent.Client.Tracker;
 
-namespace dhttest
+namespace MonoTorrent.PeerSwarm
 {
 	public class PeerSwarmManager : IDisposable
 	{

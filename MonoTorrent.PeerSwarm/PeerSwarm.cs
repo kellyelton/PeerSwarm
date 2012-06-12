@@ -1,7 +1,6 @@
 ﻿using System;
-using MonoTorrent;
 
-namespace dhttest
+namespace MonoTorrent.PeerSwarm
 {
 	public abstract class PeerSwarm : IPeerSwarm,IDisposable
 	{

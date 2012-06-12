@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dhttest", "dhttest\dhttest.csproj", "{D0F6B3E9-0C4B-453D-A123-F48DAB2DAB6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeerSwarmTester", "dhttest\PeerSwarmTester.csproj", "{D0F6B3E9-0C4B-453D-A123-F48DAB2DAB6E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTorrent", "monotorrent\src\MonoTorrent\MonoTorrent.csproj", "{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTorrent.Dht", "monotorrent\src\MonoTorrent.Dht\MonoTorrent.Dht.csproj", "{7A2A7E73-FD43-4171-AA34-DA413D35459E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTorrent.PeerSwarm", "MonoTorrent.PeerSwarm\MonoTorrent.PeerSwarm.csproj", "{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,15 @@ Global
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Stats|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Stats|Any CPU.Build.0 = Debug|Any CPU
 		{7A2A7E73-FD43-4171-AA34-DA413D35459E}.Stats|x86.ActiveCfg = Release|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Stats|Any CPU.ActiveCfg = Release|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Stats|Any CPU.Build.0 = Release|Any CPU
+		{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}.Stats|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

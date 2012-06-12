@@ -1,18 +1,16 @@
 ﻿using System;
-using MonoTorrent;
 using MonoTorrent.Dht;
 using MonoTorrent.Dht.Listeners;
 using System.Net;
 using System.IO;
 
-namespace dhttest
+namespace MonoTorrent.PeerSwarm
 {
 	public class DhtBasedSwarm : PeerSwarm
 	{
 		private readonly DhtListener _listener;
 		private readonly DhtEngine _engine;
 		private readonly byte[] _nodes;
-		private readonly Random _random;
 		public DhtBasedSwarm(InfoHash hash, int port):base(hash,port)
 		{
 			_listener = new DhtListener(new IPEndPoint(IPAddress.Any, Port));
@@ -21,9 +19,8 @@ namespace dhttest
 			_engine.PeersFound += EnginePeersFound;
 			_engine.StateChanged += EngineStateChanged;
 			_listener.MessageReceived += ListenerMessageReceived;
-			_random = new Random();
 			//TODO Should somehow pull this piece out of this file, so it can be genericafied
-			if(!File.Exists(Path.Combine(MainClass.BasePath , "DHTNodes.txt"))) return;
+			if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "DHTNodes.txt"))) return;
 			Log("Node File Found.");
 			_nodes = File.ReadAllBytes("DHTNodes.txt");
 		}
@@ -69,7 +66,7 @@ namespace dhttest
 		public override void Stop()
 		{
 			Log("Stopping");
-			File.WriteAllBytes(Path.Combine(MainClass.BasePath, "DHTNodes.txt"), _engine.SaveNodes());
+			File.WriteAllBytes(Path.Combine(Environment.CurrentDirectory, "DHTNodes.txt"), _engine.SaveNodes());
 			_listener.Stop();
 			_engine.Stop();
 		}

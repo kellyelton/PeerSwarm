@@ -1,16 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using MonoTorrent;
-using MonoTorrent.Client;
 using MonoTorrent.Common;
+using MonoTorrent.PeerSwarm;
 
-namespace dhttest
+namespace PeerSwarmTester
 {
 	public class MainClass
 	{
@@ -19,8 +17,6 @@ namespace dhttest
 		private static bool _quit;
 
 		public static PeerSwarmManager Man;
-
-		public static string BasePath = Environment.CurrentDirectory;
 
 		public static void Main (string[] args)
 		{

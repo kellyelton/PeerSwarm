@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading;
-using MonoTorrent;
 using MonoTorrent.Client.Tracker;
 using MonoTorrent.Common;
 
-namespace dhttest
+namespace MonoTorrent.PeerSwarm
 {
 	public class TrackerBasedSwarm : PeerSwarm
 	{
-		private readonly List<Tracker> _trackers;
+		private readonly List<Client.Tracker.Tracker> _trackers;
 		public AnnounceParameters AParams { get; set; }
 
 		public TrackerBasedSwarm(InfoHash hash, int port, AnnounceParameters param):base(hash,port)
 		{
 			AParams = param;
-			_trackers = new List<Tracker>();
+			_trackers = new List<Client.Tracker.Tracker>();
 		}
 		public void AddTracker(string track)
 		{

@@ -7,8 +7,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D0F6B3E9-0C4B-453D-A123-F48DAB2DAB6E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>dhttest</RootNamespace>
-    <AssemblyName>dhttest</AssemblyName>
+    <RootNamespace>PeerSwarmTester</RootNamespace>
+    <AssemblyName>PeerSwarmTester</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,29 +62,27 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>dhttest.MainClass</StartupObject>
+    <StartupObject>PeerSwarmTester.MainClass</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DHTBasedSwarm.cs" />
-    <Compile Include="IPeerSwarm.cs" />
-    <Compile Include="LogEventArgs.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="PeerSwarmManager.cs" />
-    <Compile Include="PeerSwarm.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
-    <Compile Include="TrackerBasedSwarm.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\MonoTorrent.PeerSwarm\MonoTorrent.PeerSwarm.csproj">
+      <Project>{AA887EF5-1160-4A0A-931A-7282EDA3F1C3}</Project>
+      <Name>MonoTorrent.PeerSwarm</Name>
+    </ProjectReference>
     <ProjectReference Include="..\monotorrent\src\MonoTorrent\MonoTorrent.csproj">
       <Project>{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}</Project>
       <Name>MonoTorrent</Name>
