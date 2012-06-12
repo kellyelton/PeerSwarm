@@ -93,15 +93,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="OCTGN.torrent" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resource1.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\OCTGN.torrent" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Net;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -15,13 +16,14 @@ namespace PeerSwarmTester
 		private static InfoHash _hash;
 		private const int Port = 15000;
 		private static bool _quit;
+		private static string _name = Assembly.GetExecutingAssembly().FullName;
 
 		public static PeerSwarmManager Man;
 
 		public static void Main (string[] args)
 		{
 			var sha = new SHA1CryptoServiceProvider();
-			_hash = new InfoHash(sha.ComputeHash(Encoding.ASCII.GetBytes("OCTGN")));
+			_hash = new InfoHash(sha.ComputeHash(Encoding.ASCII.GetBytes(_name)));
 
 			Debug.Listeners.Add(new ConsoleTraceListener());
 			Console.CancelKeyPress += delegate { Shutdown(); };
@@ -40,7 +42,7 @@ namespace PeerSwarmTester
 				BytesDownloaded = 0,
 				BytesLeft = 0,
 				BytesUploaded = 0,
-				PeerId = "OCTGN",
+				PeerId = _name,
 				Ipaddress = IPAddress.Any.ToString(),
 				Port = Port,
 				RequireEncryption = false,
