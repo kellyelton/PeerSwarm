@@ -102,9 +102,9 @@ namespace MonoTorrent.PeerSwarm
 
 		void SwarmPeersFound(object sender, PeersFoundEventArgs e)
 		{
-			e.Peers.AsParallel().ForAll(delegate(Peer p)
+			e.Peers.ForEach(delegate(Peer p)
 			{
-				if (!Peers.AsParallel().Contains(p)) Peers.Add(p);
+				if (!Peers.AsParallel().Any(p2=>p2.ConnectionUri == p2.ConnectionUri)) Peers.Add(p);
 			});
 			OnPeersFound(e);
 		}
