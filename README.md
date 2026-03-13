@@ -33,6 +33,25 @@ PeerSwarm was developed over approximately 3 days (June 9-12, 2012) across rough
 
 The project evolved from a simple test harness into a cleanly abstracted library with interface-based design over the course of those sessions.
 
+## How Early Was This?
+
+PeerSwarm was built over a weekend in **June 2012**. The core insight — piggybacking on the BitTorrent Mainline DHT's ~15 million concurrent users as a free, serverless peer discovery mechanism for non-torrent applications — predates most of the projects that later formalized decentralized peer discovery:
+
+| Date | Project |
+|---|---|
+| **May 2005** | **Mainline DHT** ships in BitTorrent client 4.2.0 (BEP 5). By 2012 it had ~15-28 million concurrent users. |
+| **~2007-2009** | **Vuze "Virtual Torrents"** — the only known prior use of BitTorrent DHT for non-torrent purposes, via Vuze's plugin system (chat, messaging). No exact launch date found. |
+| **Jun 2012** | **This project (PeerSwarm)** — generates a synthetic info hash from an app's assembly name and uses it to discover peers via DHT and trackers |
+| **Jun 2013** | **Tox** — encrypted P2P messenger with its own custom DHT. 1 year later. |
+| **Oct 2013** | **WebTorrent** (Feross Aboukhadijeh) — BitTorrent in the browser via WebRTC. 16 months later. |
+| **Jul 2014** | **IPFS whitepaper** published by Juan Benet. Uses its own Kademlia DHT. 2 years later. |
+| **Jan 2015** | **IPFS alpha** released. 2.5 years later. |
+| **2016** | **libp2p** spun out of IPFS as a standalone general-purpose P2P networking stack. 4 years later. |
+| **Aug 2016** | **Beaker Browser** released, later spawning **Hyperswarm** (~2018-2019), a Kademlia DHT for peer discovery. |
+| **~2016-2017** | **bitboot** (npm) — bootstrapping P2P networks via BitTorrent DHT. Very similar concept to PeerSwarm. 4-5 years later. |
+
+The key distinction is that most later projects (IPFS, libp2p, Tox, Hyperswarm) built their own DHT networks from scratch, requiring bootstrap nodes and critical mass. PeerSwarm's approach was to skip that entirely by parasitically using BitTorrent's already-massive existing network — an insight that was both pragmatic and largely unexplored at the time. Only Vuze's internal plugin system had done something similar, and that was tied to a specific BitTorrent client rather than exposed as a general-purpose library.
+
 ## AI Code Review
 
 | Criterion | Grade | Notes |
